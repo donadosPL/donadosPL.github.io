@@ -99,6 +99,62 @@
     .light-mode .subheading {
       color: black;
     }
+
+    .gear-button {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+    .gear-button:hover {
+      background-color: #444;
+    }
+
+    .changelog-popup {
+      position: fixed;
+      bottom: 60px;
+      right: 10px;
+      width: 250px;
+      background-color: #222;
+      color: white;
+      border: 1px solid #555;
+      border-radius: 10px;
+      padding: 15px;
+      display: none;
+      font-size: 12px;
+      z-index: 999;
+    }
+
+    .changelog-popup .close-btn {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .light-mode .changelog-popup {
+      background-color: #f8f8f8;
+      color: black;
+      border-color: #ccc;
+    }
+
+    .light-mode .changelog-popup .close-btn {
+      color: black;
+    }
   </style>
 </head>
 <body>
@@ -117,7 +173,21 @@
   <label><input type="checkbox" id="enableTikTokBypass"> TikTok bypass (1 invisible per letter)</label>
 </div>
 
-<textarea id="outputText" rows="5" placeholder="A hate crime is a criminal act motivated by bias or prejudice against a person's race, religion, ethnicity, gender, or other protected characteristics. It is illegal and punishable by law." readonly></textarea>
+<textarea id="outputText" rows="5" placeholder="output here" readonly></textarea>
+
+<!-- Gear Button -->
+<button class="gear-button" onclick="toggleChangelog()">⚙️</button>
+
+<!-- Changelog Popup -->
+<div id="changelogPopup" class="changelog-popup">
+  <button class="close-btn" onclick="toggleChangelog()">✖</button>
+  <strong>Change logs here:</strong>
+  <ul>
+    <li>🆕 Fixed tiktok bypass</li>
+    <li>⚙️ Added changelog popup!</li>
+    <li>✨ Better dark/light toggle</li>
+  </ul>
+</div>
 
 <script>
   const letterMap = {
@@ -142,6 +212,8 @@
     const enableTikTok = document.getElementById("enableTikTokBypass").checked;
 
     const invisibles = ['\u200B', '\u200C', '\u200D', '\u2060'];
+    const skipInvisibleAfter = ['A', 'C', 'G', 'H', 'I', 'K', 'L', 'P', 'R', 'S', 'T', 'W', 'X'];
+
     let output = "";
 
     for (let char of input) {
@@ -152,10 +224,12 @@
 
       output += replacedChar;
 
-      if (enableTikTok) {
+      const upperChar = char.toUpperCase();
+
+      if (enableTikTok && !skipInvisibleAfter.includes(upperChar)) {
         const rand = Math.floor(Math.random() * invisibles.length);
         output += invisibles[rand];
-      } else if (enableInvisible) {
+      } else if (enableInvisible && !enableTikTok) {
         const invisibleCharCount = Math.floor(Math.random() * 4) + 1;
         for (let i = 0; i < invisibleCharCount; i++) {
           const rand = Math.floor(Math.random() * invisibles.length);
@@ -171,6 +245,11 @@
     }, () => {
       alert("Error!");
     });
+  }
+
+  function toggleChangelog() {
+    const popup = document.getElementById("changelogPopup");
+    popup.style.display = popup.style.display === "block" ? "none" : "block";
   }
 </script>
 
