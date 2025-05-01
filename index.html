@@ -119,6 +119,10 @@
 
 <textarea id="outputText" rows="5" placeholder="A hate crime is a criminal act motivated by bias or prejudice against a person's race, religion, ethnicity, gender, or other protected characteristics. It is illegal and punishable by law." readonly></textarea>
 
+<div id="visitor-counter" style="position: fixed; bottom: 10px; right: 10px; font-size: 12px; background: rgba(0,0,0,0.5); color: white; padding: 5px 10px; border-radius: 5px;">
+  Odwiedziny: <span id="visit-count">...</span>
+</div>
+
 <script>
   const letterMap = {
     'A': 'ᗅ', 'B': '₿', 'C': 'ᑡ', 'D': 'ↇ', 'E': '𐌄', 'F': 'ϝ', 'G': 'ᏽ', 'H': 'ⴼ',
@@ -172,6 +176,12 @@
       alert("Error!");
     });
   }
+
+  fetch('https://api.countapi.xyz/hit/donadospl.github.io/potet-counter')
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('visit-count').innerText = data.value;
+    });
 </script>
 
 </body>
