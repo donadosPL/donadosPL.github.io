@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>👋</title> 
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background-color: #121212;
+      color: white;
+    }
+    input, textarea, button {
+      width: 100%;
+      margin-top: 10px;
+      font-size: 14px;
+      padding: 10px 0;
+      background-color: #333;
+      color: white;
+      border: 1px solid #555;
+      border-radius: 5px;
+    }
+    button {
+      cursor: pointer;
+      font-size: 14px;
+      width: auto;
+      padding: 10px 20px;
+    }
+    button:hover {
+      background-color: #444;
+    }
+    .light-mode {
+      background-color: #fff;
+      color: black;
+    }
+    .light-mode input, .light-mode textarea, .light-mode button {
+      background-color: #f0f0f0;
+      color: black;
+    }
+    .light-mode button:hover {
+      background-color: #ddd;
+    }
+    .toggle-button {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 40px;
+      height: 40px;
+      font-size: 12px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+    .toggle-button:hover {
+      background-color: #444;
+    }
+    .checkbox-container {
+      margin-top: 15px;
+      padding: 10px;
+      border: 1px solid #555;
+      border-radius: 8px;
+      background-color: #1e1e1e;
+      width: fit-content;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .light-mode .checkbox-container {
+      background-color: #eee;
+      border-color: #ccc;
+    }
+    .rainbow-text {
+      background: linear-gradient(90deg, #000, #444, #888, #ccc, #fff, #ccc, #888, #444, #000);
+      background-size: 800% 100%;
+      background-repeat: repeat-x;
+      background-position: 0% 50%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow-animation 16s linear infinite;
+      display: inline-block;
+    }
+    @keyframes rainbow-animation {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+    .subheading {
+      font-size: 12px;
+      text-align: left;
+      margin-top: 5px;
+      color: white;
+      font-weight: bold;
+    }
+    .light-mode .subheading {
+      color: black;
+    }
+  </style>
+</head>
+<body>
+
+<h2 class="rainbow-text">Super Cool Potet Bypasser!!!</h2>
+<p class="subheading">dont let them ruin the fun</p>
+
+<button class="toggle-button" onclick="toggleMode()">🌗</button>
+
+<input id="inputText" placeholder="paste your nasty words here">
+<button onclick="processText()">do the magic</button>
+
+<div class="checkbox-container">
+  <label><input type="checkbox" id="enableSymbolReplacement"> Replace letters with symbols</label>
+  <label><input type="checkbox" id="enableInvisibleSigns"> Add invisible signs</label>
+  <label><input type="checkbox" id="enableTikTokBypass"> TikTok bypass (1 invisible per letter)</label>
+</div>
+
+<textarea id="outputText" rows="5" placeholder="A hate crime is a criminal act motivated by bias or prejudice against a person's race, religion, ethnicity, gender, or other protected characteristics. It is illegal and punishable by law." readonly></textarea>
+
+<script>
+  const letterMap = {
+    'A': 'ᗅ', 'B': '₿', 'C': 'ᑡ', 'D': 'ↇ', 'E': '𐌄', 'F': 'ϝ', 'G': 'ᏽ', 'H': 'ⴼ',
+    'I': 'ı', 'J': 'ᒚ', 'K': 'ᛕ', 'L': 'ᢺ', 'M': 'ᱬ', 'N': 'ห', 'O': '𐍉', 'P': 'Ϸ', 
+    'Q': 'Ⴍ', 'R': 'ᖇ', 'S': 'ᔜ', 'T': '丁', 'U': 'Ǚ', 'V': 'ⴸ', 'W': 'Ш', 'X': '𐌗', 
+    'Y': 'ሄ', 'Z': 'Ⴭ',
+    'a': 'ᗅ', 'b': '₿', 'c': 'ᑡ', 'd': 'ↇ', 'e': '𐌄', 'f': 'ϝ', 'g': 'ᏽ', 'h': 'ⴼ',
+    'i': 'ı', 'j': 'ᒚ', 'k': 'ᛕ', 'l': 'ᢺ', 'm': 'ᱬ', 'n': 'ห', 'o': '𐍉', 'p': 'Ϸ', 
+    'q': 'Ⴍ', 'r': 'ᖇ', 's': 'ᔜ', 't': '丁', 'u': 'Ǚ', 'v': 'ⴸ', 'w': 'Ш', 'x': '𐌗', 
+    'y': 'ሄ', 'z': 'Ⴭ'
+  };
+
+  function toggleMode() {
+    document.body.classList.toggle('light-mode');
+  }
+
+  function processText() {
+    const input = document.getElementById("inputText").value;
+    const enableReplacement = document.getElementById("enableSymbolReplacement").checked;
+    const enableInvisible = document.getElementById("enableInvisibleSigns").checked;
+    const enableTikTok = document.getElementById("enableTikTokBypass").checked;
+
+    const invisibles = ['\u200B', '\u200C', '\u200D', '\u2060'];
+    let output = "";
+
+    for (let char of input) {
+      let replacedChar = char;
+      if (enableReplacement && letterMap[char]) {
+        replacedChar = letterMap[char];
+      }
+
+      output += replacedChar;
+
+      if (enableTikTok) {
+        const rand = Math.floor(Math.random() * invisibles.length);
+        output += invisibles[rand];
+      } else if (enableInvisible) {
+        const invisibleCharCount = Math.floor(Math.random() * 4) + 1;
+        for (let i = 0; i < invisibleCharCount; i++) {
+          const rand = Math.floor(Math.random() * invisibles.length);
+          output += invisibles[rand];
+        }
+      }
+    }
+
+    document.getElementById("outputText").value = output;
+
+    navigator.clipboard.writeText(output).then(() => {
+      alert("Done!");
+    }, () => {
+      alert("Error!");
+    });
+  }
+</script>
+
+</body>
+</html>
